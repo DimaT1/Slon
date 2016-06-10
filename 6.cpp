@@ -7,6 +7,7 @@ using namespace std;
 
 void psqrt4(int a, int b, int c, int d, int e);
 void psqrt2(int a, int b, int c);
+bool IsEqual(float a, float b);
 
 int main(void)
 {
@@ -50,8 +51,14 @@ void psqrt4(int a, int b, int c, int d, int e) {
         if((a1 < 0) && (b < 0) && (b1 < 0))
             b1*= -1;
 
-        if((c < 0) && (abs(b) < precision))
+        if((c < 0) && (IsEqual(b, 0)))
             a1*= -1;
+
+
+        if((!IsEqual(a1, round(a1))) || (!IsEqual(b1, round(b1))) || (!IsEqual(c1, round(c1)))) {
+            cout << "нецелые коэффициенты, наибольшая степень икса 2"  << endl;
+            return;
+        }
 
     if(((2 * a1 * c1 + b1 * b1 - c) < precision) && ((2 * a1 * c1 + b1 * b1 - c) > -precision))
         cout << "(" << a1 << ")x^2 + (" << b1 << ")x + (" << c1 << ")" << endl;
@@ -68,14 +75,27 @@ void psqrt2(int a, int b, int c) {
     else {
 
         bool flag = (b > 0);
-        b = abs(b);
+        if(b < 0) b *= -1;
+        float a1, b1;
 
-        if((((sqrt(a) * sqrt(c) * 2) - b) < precision) && ((sqrt(a) * sqrt(c) * 2) - b) > -precision)
+        a1 = sqrt(a);
+        b1 = sqrt(c);
+
+        if((!IsEqual(a1, round(a1))) || (!IsEqual(b1, round(b1)))) {
+            cout << "нецелые коэффициенты, наибольшая степень икса 1"  << endl;
+            return;
+        }
+
+        if((((a1 * b1 * 2) - b) < precision) && ((a1 * b1 * 2) - b) > -precision)
             if(flag)
-                cout << sqrt(a) << "x + " << sqrt(c) << endl;
+                cout << a1 << "x + " << b1 << endl;
             else
-                cout << sqrt(a) << "x - " << sqrt(c) << endl;
+                cout << a1 << "x - " << b1 << endl;
         else
             cout << "нецелые коэффициенты, наибольшая степень икса 1"  << endl;
     }
+}
+
+bool IsEqual(float a, float b) {
+    return (a-b < precision) && (a-b > -precision);
 }
